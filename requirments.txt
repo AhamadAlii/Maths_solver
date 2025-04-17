@@ -1,0 +1,7 @@
+openai-whisper
+sympy
+pytesseract
+pillow
+pyttsx3
+pyaudio
+SpeechRecognition
