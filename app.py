@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template, request
 from solver import solve_expression, extract_text_from_image
 import os
@@ -22,8 +23,9 @@ def index():
                 extracted_text = extract_text_from_image(image_path)
                 result = solve_expression(extracted_text)
     return render_template('index.html', result=result)
-
 if __name__ == '__main__':
     if not os.path.exists(app.config['UPLOAD_FOLDER']):
         os.makedirs(app.config['UPLOAD_FOLDER'])
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
+
