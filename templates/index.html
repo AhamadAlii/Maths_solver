@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Math Helper</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h1>🧠 Math Helper</h1>
+
+    <form method="POST" enctype="multipart/form-data">
+      <label>Enter Math Expression:</label><br>
+      <input type="text" id="math_input" name="math_text" placeholder="e.g. 2x + 3 = 7">
+      <button type="submit">Solve</button>
+      <button type="button" onclick="startListening()">🎤 Speak</button>
+    </form>
+
+    <form method="POST" enctype="multipart/form-data">
+      <label>Or Upload an Image:</label><br>
+      <input type="file" name="image_file">
+      <button type="submit">Upload & Solve</button>
+    </form>
+
+    {% if result %}
+    <div class="result">
+      <h2>✅ Result:</h2>
+      <p>{{ result }}</p>
+    </div>
+    {% endif %}
+  </div>
+
+  <script>
+    function startListening() {
+      const inputField = document.getElementById("math_input");
+
+      if (!('webkitSpeechRecognition' in window)) {
+        alert("❌ Your browser doesn't support voice input.");
+        return;
+      }
+
+      const recognition = new webkitSpeechRecognition();
+      recognition.lang = 'en-US';
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+
+      recognition.onstart = function () {
+        inputField.placeholder = "🎙️ Listening...";
+      };
+
+      recognition.onresult = function (event) {
+        const transcript = event.results[0][0].transcript;
+        inputField.value = transcript;
+        inputField.placeholder = "Speech converted!";
+      };
+
+      recognition.onerror = function () {
+        inputField.placeholder = "❌ Could not recognize speech";
+      };
+
+      recognition.onend = function () {
+        if (inputField.placeholder === "🎙️ Listening...") {
+          inputField.placeholder = "Try again";
+        }
+      };
+
+      recognition.start();
+    }
+  </script>
+</body>
+</html>
