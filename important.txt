@@ -1,6 +1,0 @@
-code to activate the virtual enviroment 
-
-"math_helper_env\Scripts\Activate"
-
-
-code to run the main code = "python math_helper.py"

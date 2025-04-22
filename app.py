@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template, request, session
 from werkzeug.utils import secure_filename
 from sympy import symbols, Eq, solve, simplify, pretty
@@ -70,10 +71,10 @@ def index():
                 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
                 image.save(image_path)
                 extracted_text = extract_text_from_image(image_path)
-                result, steps = solve_expression(extracted_text)
-                session['history'].append({'query': extracted_text, 'result': result, 'steps': steps})
-
-    return render_template('index.html', result=result, steps=steps, history=session.get('history'))
+                result = solve_expression(extracted_text)
+    return render_template('index.html', result=result)
 
 if __name__ == '__main__':
+    if not os.path.exists(app.config['UPLOAD_FOLDER']):
+        os.makedirs(app.config['UPLOAD_FOLDER'])
     app.run(debug=True)
